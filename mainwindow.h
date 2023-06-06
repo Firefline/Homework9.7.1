@@ -50,6 +50,8 @@ private slots:
 
 
 
+    void on_pb_clearResult_clicked();
+
 private:
     Ui::MainWindow *ui;
     QString pathToFile = "";
@@ -58,6 +60,8 @@ private:
     QVector<uint32_t> readData;
     QVector<double> procesData;
     QVector<double> mins, maxs;
+
+    QCustomPlot *customPlot;
 
     void ViewGraph(void);
 

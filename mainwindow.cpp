@@ -8,7 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->pb_clearResult->setCheckable(true);
 
-    graphClass = new Graphic(ui->customPlot, NUM_GRAPH);
+    customPlot = new QCustomPlot();
+    customPlot->resize(400, 400);
+    customPlot->show();
 
     connect (this, &MainWindow::sig_ReadyForShow, this, &MainWindow::ViewGraph);
 }
@@ -16,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete graphClass;
+    delete customPlot;
 }
 
 
@@ -227,15 +229,18 @@ void MainWindow::on_pb_start_clicked()
                                                 mins = FindMin(res);
                                                 DisplayResult(mins, maxs);
 
+                                                for (int i = 0; i <= 1000; ++i)
+                                                {
+                                                    x.push_back(res[i]);
+                                                    y.push_back(res[i]);
+                                                }
+
                                                 /*
                                                  * Тут необходимо реализовать код наполнения серии
                                                  * и вызов сигнала для отображения графика
                                                  */
 
-                                                x = mins;
-                                                y = maxs;
-
-                                                sig_ReadyForShow();
+                                                emit sig_ReadyForShow();
 
                                              };
 
@@ -249,17 +254,20 @@ void MainWindow::on_pb_start_clicked()
 
 void MainWindow::ViewGraph()
 {
-    graphClass->ClearGraph(ui->customPlot);
+    customPlot->clearGraphs();
 
-    ui->customPlot->addGraph();
-    ui->customPlot->graph(0)->setData(x, y);
+    customPlot->addGraph();
 
-    ui->customPlot->xAxis->setLabel("x");
-    ui->customPlot->yAxis->setLabel("y");
+    customPlot->xAxis->setRange(-1.1, 0.2);
+    customPlot->yAxis->setRange(-1.1, 0.2);
 
-    ui->customPlot->xAxis->setRange(-1, 1);
-    ui->customPlot->yAxis->setRange(-1, 1);
+    customPlot->graph(0)->addData(x, y);
 
-    ui->customPlot->replot();
+    customPlot->replot();
+}
+
+void MainWindow::on_pb_clearResult_clicked()
+{
+    customPlot->clearGraphs();
 }
 
