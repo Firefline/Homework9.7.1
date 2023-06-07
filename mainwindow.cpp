@@ -12,6 +12,10 @@ MainWindow::MainWindow(QWidget *parent)
     customPlot->resize(400, 400);
     customPlot->show();
 
+    tmr = new QTimer(this);
+    tmr->setInterval(1/FD);
+    connect(tmr, &QTimer::timeout, this, &MainWindow::on_pb_start_clicked);
+
     connect (this, &MainWindow::sig_ReadyForShow, this, &MainWindow::ViewGraph);
 }
 
@@ -194,6 +198,11 @@ void MainWindow::on_pb_path_clicked()
 /****************************************************/
 void MainWindow::on_pb_start_clicked()
 {
+    time = 0;
+
+    tmr->start();
+    ++time;
+
     //проверка на то, что файл выбран
     if(pathToFile.isEmpty()){
 
@@ -231,7 +240,7 @@ void MainWindow::on_pb_start_clicked()
 
                                                 for (int i = 0; i <= 1000; ++i)
                                                 {
-                                                    x.push_back(res[i]);
+                                                    x.push_back(time);
                                                     y.push_back(res[i]);
                                                 }
 
@@ -249,17 +258,19 @@ void MainWindow::on_pb_start_clicked()
                                .then(findMax);
 
 
-
+tmr->stop();
 }
 
 void MainWindow::ViewGraph()
 {
+    customPlot->show();
+
     customPlot->clearGraphs();
 
     customPlot->addGraph();
 
-    customPlot->xAxis->setRange(-1.1, 0.2);
-    customPlot->yAxis->setRange(-1.1, 0.2);
+    customPlot->xAxis->setRange(0, time + 0.1);
+    customPlot->yAxis->setRange(-1.1, -0.5);
 
     customPlot->graph(0)->addData(x, y);
 
@@ -270,4 +281,3 @@ void MainWindow::on_pb_clearResult_clicked()
 {
     customPlot->clearGraphs();
 }
-

@@ -11,6 +11,10 @@
 #include "qcustomplot.h"
 #include "graphic.h"
 
+#include <QDebug>
+#include <QTimer>
+#include <QTime>
+
 ///Подключаем все что нужно для графиков
 #include <QLineSeries>
 #include <QtCharts>
@@ -42,7 +46,7 @@ public:
     //Метод отображает результаты
     void DisplayResult(QVector<double> mins, QVector<double> maxs);
 
-
+    QTimer *tmr;
 
 private slots:
     void on_pb_path_clicked();
@@ -68,6 +72,7 @@ private:
     QCPGraph* graphic;
     Graphic* graphClass;
 
+    int time = 0;
     QVector<double> x;
     QVector<double> y;
 signals:
