@@ -72,11 +72,11 @@ private:
     QCPGraph* graphic;
     Graphic* graphClass;
 
-    int time = 0;
     QVector<double> x;
     QVector<double> y;
 signals:
     void sig_ReadyForShow();
+    void sig_start();
 
 };
 #endif // MAINWINDOW_H
