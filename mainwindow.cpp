@@ -229,9 +229,12 @@ void MainWindow::on_pb_start_clicked()
                                                 mins = FindMin(res);
                                                 DisplayResult(mins, maxs);
 
+                                                double a = 0.000;
+
                                                 for (int i = 0; i <= 1000; ++i)
                                                 {
-                                                    x.push_back(i/1000);
+                                                    x.push_back(a/1000);
+                                                    a += 1.000;
                                                     y.push_back(res[i]);
                                                 }
 
@@ -258,10 +261,9 @@ void MainWindow::ViewGraph()
 
     customPlot->addGraph();
 
-    customPlot->xAxis->setRange(0, 1);
-    customPlot->yAxis->setRange(y[0], y[999]);
-
     customPlot->graph(0)->addData(x, y);
+
+    customPlot->rescaleAxes();
 
     customPlot->replot();
 }
